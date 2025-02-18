@@ -17,3 +17,4 @@ touch app/reminder.sh
 touch modules/functions.sh
 touch assets/submissions.txt
 touch config/config.env
+touch startup.sh

@@ -36,21 +36,29 @@ source ./modules/functions.sh
 submissions_file="./assets/submissions.txt"
 
 # Print remaining time and run the reminder function
+echo "--------------------------------------------"
 echo "Assignment: $ASSIGNMENT"
 echo "Days remaining to submit: $DAYS_REMAINING days"
 echo "--------------------------------------------"
 
+check_submissions "$submissions_file" "$ASSIGNMENT"
+
 # Print remaining time for the Git assignment and run the reminder function
+echo "--------------------------------------------"
 echo "Assignment: $GITH"
 echo "Days remaining to submit: $GITH_REMAINING days"
 echo "--------------------------------------------"
 
+check_submissions $submissions_file "$GITH"
+
 # Print remaining time for the shell basics assignments and run the reminder function
+echo "--------------------------------------------"
 echo "Assignment: $BASICS"
+
 echo "Days remaining to submit: $BASICS_REMAINING days"
 echo "--------------------------------------------"
 
-check_submissions $submissions_file
+check_submissions $submissions_file "$BASICS"
 EOF
 
 #Populating the functions.sh
@@ -60,6 +68,7 @@ cat << 'EOF' > modules/functions.sh
 # Function to read submissions file and output students who have not submitted
 function check_submissions {
     local submissions_file=$1
+    local assignment_name=$2
     echo "Checking submissions in $submissions_file"
 
     # Skip the header and iterate through the lines
@@ -70,16 +79,8 @@ function check_submissions {
         status=$(echo "$status" | xargs)
 
         # Check if assignment matches and status is 'not submitted'
-        if [[ "$assignment" == "$ASSIGNMENT" && "$status" == "not submitted" ]]; then
-            echo "Reminder: $student has not submitted the $ASSIGNMENT assignment!"
-	fi
-
-	if [[ "$assignment" == "$GITH" && "$status" == "not submitted" ]]; then
-            echo "Reminder: $student has not submitted the $GITH assignment!"
-        fi
-
-	if [[ "$assignment" == "$BASICS" && "$status" == "not submitted" ]]; then
-            echo "Reminder: $student has not submitted the $BASICS assignment!"
+        if [[ "$assignment" == "$assignment_name" && "$status" == "not submitted" ]]; then
+            echo "Reminder: $student has not submitted the $assignment assignment!"
         fi
 
     done < <(tail -n +2 "$submissions_file") # Skip the header
